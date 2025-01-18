@@ -46,7 +46,7 @@ month_progress() {
 }
 
 day_progress() {
-    elapsed=$(date +%H)
+    elapsed=$(($(date +%H) + 1))
     total=24
     left=$((total - elapsed))
 
@@ -98,16 +98,16 @@ get_progress_bar $elapsed $left
 
 if [[ -z $quiet ]]; then
     width=$(tput cols)
-    total_width=$((${#label_left} + $total + ${#label_right} + 2))
+    total_width=$((${#label_left} + total + ${#label_right} + 2))
 
-    if [[ $total_width -gt $width ]]; then
+    if [[ $total_width -ge $width ]]; then
         n_spaces=$(($(tput cols) - ${#label_left} - ${#label_right}))
         spaces=$(printf "%${n_spaces}s")
 
         printf "%b\n" "$progress_bar"
         printf "\e[1m%s\e[0m%s%s\n" "$label_left" "$spaces" "$label_right"
     else
-        n_spaces=$((width - ${#label_left} - ${#label_right} - $total))
+        n_spaces=$((width - ${#label_left} - ${#label_right} - total))
         left_spaces=$((n_spaces / 2))
         right_spaces=$((n_spaces - left_spaces))
         spaces_left=$(printf "%${left_spaces}s")
